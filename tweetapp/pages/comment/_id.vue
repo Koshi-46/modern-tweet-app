@@ -17,7 +17,7 @@
           :to="item.path"
         >
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>{{ item.name }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -26,7 +26,6 @@
         </v-list-item>
       </v-list>
 
-      <!-- 投稿追加 -->
       <form class="spacing-playground pa-6">
         <v-textarea
           type="text"
@@ -45,59 +44,53 @@
     </v-navigation-drawer>
 
     <template>
-      <!-- {{ this.$route.params.id }}
-
-     <v-row justify="center">
-    <v-col cols="9">
-      <h2>URLパラメータ取得結果:route.params</h2>
-      {{ this.$route.params.name }}<br>
-      {{ this.$route.params.content }}<br> -->
-
-      <!-- {{ item.id }}
-
-      <v-row justify="center">
-        <v-col cols="9">
-          <h2>URLパラメータ取得結果</h2>
-          {{ item.name }}<br />
-          {{ item.content }}<br />
-        </v-col>
-      </v-row> -->
-
+      <!-- 投稿 -->
       <v-card
         v-for="item in contactLists"
         :key="item.id"
-        class="mx-auto spacing-playground mb-5"
+        class="mx-auto"
         color="#26c6da"
         dark
-        width="1000"
+        width="1200"
       >
-        <v-row no-gutters>
+        <v-row no-gutters v-if="item.id == $route.params.id">
           <v-col cols="12" sm="6" md="8">
             <v-card-text class="font-weight-bold spacing-playground pb-0">
               {{ item.content }}
             </v-card-text>
           </v-col>
+          <v-col cols="6" md="4">
+            <v-card-actions>
+              <v-list-item class="grow">
+                <v-list-item-content>
+                  <v-list-item-title class="text-right">{{
+                    item.name
+                  }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-card-actions>
+          </v-col>
         </v-row>
       </v-card>
+      <v-list-item>
+        <v-list-item-content v-for="comment in commentLists" :key="comment.id">
+          <v-list-item-title>{{ comment.content }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </template>
-
     <v-main> </v-main>
   </v-app>
 </template>
+
 
 <script>
 export default {
   data() {
     return {
-      items: [
-        { title: "ホーム", icon: "mdi-home", path: "/" },
-        // { title: 'ログアウト', icon: 'mdi-logout', path: '/logout' },
-        // { title: 'ログイン', icon: 'mdi-login', path: '/login' },
-        // { title: '新規登録', icon: 'mdi-wrench', path: '/register' },
-      ],
-      newName: "",
-      newContent: "",
+      items: [{ title: "ホーム", icon: "mdi-home", path: "/" }],
+      newComment: "",
       contactLists: [],
+      commentLists: [],
       right: null,
     };
   },
@@ -107,8 +100,10 @@ export default {
       this.contactLists = resData.data.data;
     },
     async getComment() {
-      const resData = await this.$axios.get("http://127.0.0.1:8000/api/comment/");
-      this.contactLists = resData.data.data;
+      const resData = await this.$axios.get(
+        "http://127.0.0.1:8000/api/comment/"
+      );
+      this.commentLists = resData.data.data;
     },
     async insertComment() {
       const sendData = {
@@ -120,6 +115,7 @@ export default {
   },
   created() {
     this.getComment();
+    this.getContact();
   },
 };
 </script>
