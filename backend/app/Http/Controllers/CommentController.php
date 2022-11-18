@@ -12,14 +12,14 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-        $comments = Comment::all();
-        return response()->json([
-            'comment' => $comments
-        ], 200);
-    }
+    // public function index()
+    // {
+    //     //
+    //     $comments = Comment::all();
+    //     return response()->json([
+    //         'comment' => $comments
+    //     ], 200);
+    // }
 
     /**
      * Show the form for creating a new resource.

@@ -10,7 +10,7 @@ class TweetController extends Controller
     //
     public function index()
     {
-        $items = Tweet::all();
+        $items = Tweet::with(['comments'])->get();
         return response()->json([
             'data' => $items
         ], 200);

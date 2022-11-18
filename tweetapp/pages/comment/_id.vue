@@ -34,7 +34,6 @@
           v-model="newComment"
           outlined
           :counter="120"
-          :error-messages="errors"
           required
         ></v-textarea>
         <v-btn class="mr-4" type="submit" @click="insertComment">
@@ -73,7 +72,10 @@
         </v-row>
       </v-card>
       <v-list-item>
-        <v-list-item-content v-for="comment in commentLists" :key="comment.id">
+        <v-list-item-content
+          v-for="comment in contactLists.comments"
+          :key="comment.id"
+        >
           <v-list-item-title>{{ comment.content }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -99,22 +101,22 @@ export default {
       const resData = await this.$axios.get("http://127.0.0.1:8000/api/tweet/");
       this.contactLists = resData.data.data;
     },
-    async getComment() {
-      const resData = await this.$axios.get(
-        "http://127.0.0.1:8000/api/comment/"
-      );
-      this.commentLists = resData.data.data;
-    },
-    async insertComment() {
+    // async getComment() {
+    //   const resData = await this.$axios.get(
+    //     "http://127.0.0.1:8000/api/comment/"
+    //   );
+    //   this.commentLists = resData.data.data;
+    // },
+   async insertComment() {
       const sendData = {
+        tweet_id: this.$route.params.id,
         comment: this.newComment,
       };
       await this.$axios.post("http://127.0.0.1:8000/api/comment/", sendData);
-      this.getComment();
+      this.getContact();
     },
   },
   created() {
-    this.getComment();
     this.getContact();
   },
 };

@@ -58,12 +58,38 @@
 export default {
   data() {
     return {
-      content: "",
+      items: [
+        { title: "ホーム", icon: "mdi-home", path: "/" },
+        // { title: 'ログアウト', icon: 'mdi-logout', path: '/logout' },
+        // { title: 'ログイン', icon: 'mdi-login', path: '/login' },
+        // { title: '新規登録', icon: 'mdi-wrench', path: '/register' },
+      ],
+      newName: "",
+      newContent: "",
+      contactLists: [],
+      right: null,
     };
   },
   methods: {
-    
-
+    async getContact() {
+      const resData = await this.$axios.get("http://127.0.0.1:8000/api/tweet/");
+      this.contactLists = resData.data.data;
+    },
+    async insertContact() {
+      const sendData = {
+        name: this.newName,
+        content: this.newContent,
+      };
+      await this.$axios.post("http://127.0.0.1:8000/api/tweet/", sendData);
+      this.getContact();
+    },
+    async deleteContact(id) {
+      await this.$axios.delete("http://127.0.0.1:8000/api/tweet/" + id);
+      this.getContact();
+    },
+  },
+  created() {
+    this.getContact();
   },
 };
 </script>
