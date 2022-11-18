@@ -42,6 +42,9 @@
       </form>
     </v-navigation-drawer>
 
+
+    
+
     <template>
       <!-- 投稿 -->
       <v-card
@@ -72,11 +75,12 @@
         </v-row>
       </v-card>
       <v-list-item>
+
         <v-list-item-content
           v-for="comment in contactLists.comments"
           :key="comment.id"
         >
-          <v-list-item-title>{{ comment.content }}</v-list-item-title>
+          <v-list-item-title>{{ comment.comment }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </template>
@@ -92,21 +96,14 @@ export default {
       items: [{ title: "ホーム", icon: "mdi-home", path: "/" }],
       newComment: "",
       contactLists: [],
-      commentLists: [],
       right: null,
     };
   },
   methods: {
     async getContact() {
-      const resData = await this.$axios.get("http://127.0.0.1:8000/api/tweet/");
-      this.contactLists = resData.data.data;
+      const resData = await this.$axios.get(`http://127.0.0.1:8000/api/tweet/${this.$route.params.id}`);
+      this.contactLists = resData.data;
     },
-    // async getComment() {
-    //   const resData = await this.$axios.get(
-    //     "http://127.0.0.1:8000/api/comment/"
-    //   );
-    //   this.commentLists = resData.data.data;
-    // },
    async insertComment() {
       const sendData = {
         tweet_id: this.$route.params.id,
