@@ -42,16 +42,14 @@
       </form>
     </v-navigation-drawer>
 
-
-    
-
     <template>
       <!-- 投稿 -->
+
       <v-card
         v-for="item in contactLists"
         :key="item.id"
         class="mx-auto"
-        color="#26c6da"
+        color="#26c6db"
         dark
         width="1200"
       >
@@ -74,15 +72,18 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-list-item>
-
-        <v-list-item-content
-          v-for="comment in contactLists.comments"
-          :key="comment.id"
-        >
-          <v-list-item-title>{{ comment.comment }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list v-for="detail in contactLists" :key="detail.id" width="1100" class="py-1 mx-auto">
+        <v-list-item v-if="detail.id == $route.params.id"  class="px-1">
+          <v-card
+            v-for="comment in detail.comments"
+            :key="comment.id"
+            class="mb-5 py-5 px-5"
+            color="#b8ecf3"
+          >
+            <v-list-item-title>{{ comment.comment }}</v-list-item-title>
+          </v-card>
+        </v-list-item>
+      </v-list>
     </template>
     <v-main> </v-main>
   </v-app>
@@ -101,10 +102,12 @@ export default {
   },
   methods: {
     async getContact() {
-      const resData = await this.$axios.get(`http://127.0.0.1:8000/api/tweet/${this.$route.params.id}`);
-      this.contactLists = resData.data;
+      const resData = await this.$axios.get(
+        `http://127.0.0.1:8000/api/tweet/${this.$route.params.id}`
+      );
+      this.contactLists = resData.data.data;
     },
-   async insertComment() {
+    async insertComment() {
       const sendData = {
         tweet_id: this.$route.params.id,
         comment: this.newComment,
@@ -118,3 +121,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.v-list-item {
+  display: block;
+}
+</style>

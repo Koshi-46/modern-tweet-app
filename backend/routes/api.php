@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 
 
 /*
@@ -23,5 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('/tweet', TweetController::class);
 Route::apiResource('/comment', CommentController::class);
+
+Route::post('/like', [LikeController::class, 'store']);
+Route::delete('/like/{like}', [LikeController::class, 'destroy']);
 
 

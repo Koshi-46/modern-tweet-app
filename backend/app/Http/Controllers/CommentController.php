@@ -41,7 +41,7 @@ class CommentController extends Controller
     {
         $comment = Comment::create($request->all());
         return response()->json([
-            'comment' => $comment
+            'data' => $comment
         ], 201);
     }
 

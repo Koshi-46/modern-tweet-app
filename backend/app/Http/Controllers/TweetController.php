@@ -24,7 +24,7 @@ class TweetController extends Controller
     }
     public function show(Tweet $tweet)
     {
-        $item = Tweet::find($tweet);
+        $item = Tweet::with(['comments'])->get();
         if ($item) {
             return response()->json([
                 'data' => $item
